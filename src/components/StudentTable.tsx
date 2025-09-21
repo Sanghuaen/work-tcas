@@ -13,37 +13,44 @@ export default function StudentTable() {
   );
 
   return (
-    <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
-      <thead>
-        <tr style={{ backgroundColor: '#f2f2f2' }}>
-          <th style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'center', width: '5%' }}>ลำดับ</th>
-          <th style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'left' }}>ชื่อ-นามสกุล</th>
-          <th style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'left' }}>GPA</th>
-          <th style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'left' }}>รายละเอียด</th>
-        </tr>
-      </thead>
-      <tbody>
-        {sortedPortfolios.length > 0 ? (
-          sortedPortfolios.map((p, index) => (
-            <tr key={p.id}>
-              <td style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'center' }}>{index + 1}</td>
-              <td style={{ padding: '10px', border: '1px solid #ddd' }}>{p.firstName} {p.lastName}</td>
-              <td style={{ padding: '10px', border: '1px solid #ddd' }}>{p.gpa}</td>
-              <td style={{ padding: '10px', border: '1px solid #ddd' }}>
-                <Link href={`/teacher/${p.id}`} style={{ color: '#0070f3', textDecoration: 'underline' }}>
-                  ดูรายละเอียด
-                </Link>
-              </td>
+    <div className="flex justify-center items-center py-12 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-900 min-h-screen">
+      <div className="max-w-4xl w-full p-8 bg-gray-100 dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+        <h1 className="text-3xl font-bold text-center mb-8 text-sky-800 dark:text-sky-400">
+          รายการ Portfolio นักเรียน
+        </h1>
+        <table className="w-full border-collapse">
+          <thead>
+            <tr className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200">
+              <th className="p-4 border-b border-gray-300 dark:border-gray-600 text-center w-12 rounded-tl-xl">ลำดับ</th>
+              <th className="p-4 border-b border-gray-300 dark:border-gray-600 text-left">ชื่อ-นามสกุล</th>
+              <th className="p-4 border-b border-gray-300 dark:border-gray-600 text-left w-24">GPA</th>
+              <th className="p-4 border-b border-gray-300 dark:border-gray-600 text-left rounded-tr-xl w-36">รายละเอียด</th>
             </tr>
-          ))
-        ) : (
-          <tr>
-            <td colSpan={4} style={{ padding: '10px', textAlign: 'center', border: '1px solid #ddd' }}>
-              ยังไม่มีข้อมูล Portfolio
-            </td>
-          </tr>
-        )}
-      </tbody>
-    </table>
+          </thead>
+          <tbody>
+            {sortedPortfolios.length > 0 ? (
+              sortedPortfolios.map((p, index) => (
+                <tr key={p.id} className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
+                  <td className="p-4 text-center text-gray-800 dark:text-gray-200">{index + 1}</td>
+                  <td className="p-4 text-gray-800 dark:text-gray-200">{p.firstName} {p.lastName}</td>
+                  <td className="p-4 text-gray-800 dark:text-gray-200">{p.gpa}</td>
+                  <td className="p-4">
+                    <Link href={`/teacher/${p.id}`} className="text-blue-600 dark:text-blue-400 hover:underline">
+                      ดูรายละเอียด
+                    </Link>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={4} className="p-4 text-center text-gray-500 dark:text-gray-400">
+                  ยังไม่มีข้อมูล Portfolio
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 }

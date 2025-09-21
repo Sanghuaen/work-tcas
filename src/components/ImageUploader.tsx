@@ -1,3 +1,4 @@
+// src/components/ImageUploader.tsx
 "use client";
 
 import { useState } from "react";
@@ -40,8 +41,8 @@ export default function ImageUploader({
   };
 
   return (
-    <div className="p-6 bg-blue-300 rounded-2xl shadow-md">
-      <h3 className="text-lg font-semibold text-center mb-4 text-gray-700">
+    <div className="p-6 bg-gray-200 dark:bg-gray-700 rounded-xl border border-gray-300 dark:border-gray-600 shadow-sm">
+      <h3 className="text-xl font-semibold text-center mb-4 text-sky-800 dark:text-sky-400">
         {title}
       </h3>
 
@@ -52,23 +53,23 @@ export default function ImageUploader({
           multiple
           onChange={handleChange}
           id={`file-upload-${category}`}
-          style={{ display: "none" }}
+          className="hidden"
         />
         <label
           htmlFor={`file-upload-${category}`}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg cursor-pointer hover:bg-blue-700 transition"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white dark:text-gray-900 rounded-lg cursor-pointer hover:bg-blue-700 dark:hover:bg-blue-600 transition"
         >
           <Upload size={18} />
-          Upload รูปภาพ
+          อัปโหลดรูปภาพ
         </label>
       </div>
 
       {/* ✅ แสดงรูปภาพเป็นกริด */}
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
         {images.map((img) => (
           <div
             key={img.id}
-            className="relative aspect-square border rounded-lg overflow-hidden group"
+            className="relative aspect-square border-2 border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden group hover:border-blue-500 transition-colors"
           >
             <img
               src={img.url}
@@ -78,7 +79,7 @@ export default function ImageUploader({
             {/* ปุ่มลบ */}
             <button
               onClick={() => removeImage(img.id)}
-              className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
+              className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
             >
               <X size={14} />
             </button>
