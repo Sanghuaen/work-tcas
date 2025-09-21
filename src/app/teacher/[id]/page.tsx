@@ -1,3 +1,4 @@
+// src/components/StudentDetailPage.tsx
 "use client";
 
 import { usePortfolioStore } from "../../../store/store";
@@ -5,6 +6,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { IImage } from "../../../lib/types";
 import { useState } from "react";
+import { X } from "lucide-react";
 
 // Album Card
 function AlbumCard({
@@ -18,41 +20,20 @@ function AlbumCard({
 }) {
   return (
     <div
-      style={{
-        flex: 1,
-        backgroundColor: "#fff",
-        borderRadius: "8px",
-        boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-        padding: "16px",
-        cursor: "pointer",
-        transition: "transform 0.2s",
-      }}
       onClick={onClick}
+      className="flex-1 bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 cursor-pointer transform transition-transform duration-200 hover:scale-[1.03] border border-gray-200 dark:border-gray-700"
     >
-      <h3
-        style={{
-          fontSize: "1.125rem",
-          fontWeight: "600",
-          marginBottom: "12px",
-          textAlign: "center",
-          color: "#374151",
-        }}
-      >
+      <h3 className="text-xl font-semibold text-center mb-3 text-sky-800 dark:text-sky-400">
         {title}
       </h3>
       {images.length > 0 ? (
         <img
           src={images[0].url}
           alt={title}
-          style={{
-            width: "100%",
-            height: "150px",
-            objectFit: "cover",
-            borderRadius: "6px",
-          }}
+          className="w-full h-40 object-cover rounded-lg"
         />
       ) : (
-        <p style={{ textAlign: "center", color: "#6b7280" }}>ไม่มี{title}</p>
+        <p className="text-center text-gray-500 dark:text-gray-400">ไม่มีรูปภาพในอัลบั้มนี้</p>
       )}
     </div>
   );
@@ -70,77 +51,27 @@ function AlbumModal({
 }) {
   if (!images.length) return null;
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: "rgba(0,0,0,0.7)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 1000,
-        padding: "20px",
-      }}
-    >
-      <div
-        style={{
-          backgroundColor: "#fff",
-          borderRadius: "10px",
-          maxWidth: "800px",
-          width: "100%",
-          maxHeight: "90vh",
-          overflowY: "auto",
-          padding: "20px",
-        }}
-      >
-        <h2
-          style={{
-            fontSize: "1.5rem",
-            marginBottom: "16px",
-            textAlign: "center",
-            color: "#1f2937",
-          }}
+    <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 p-4">
+      <div className="relative bg-white dark:bg-gray-800 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6 shadow-xl">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
         >
+          <X size={28} />
+        </button>
+        <h2 className="text-2xl font-bold mb-6 text-center text-sky-800 dark:text-sky-400">
           {title}
         </h2>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "16px",
-          }}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {images.map((img) => (
-            <img
-              key={img.id}
-              src={img.url}
-              alt={title}
-              style={{
-                width: "100%",
-                borderRadius: "8px",
-                objectFit: "contain",
-                boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-              }}
-            />
+            <div key={img.id} className="bg-gray-100 dark:bg-gray-700 rounded-lg p-2">
+              <img
+                src={img.url}
+                alt={title}
+                className="w-full h-auto rounded-lg"
+              />
+            </div>
           ))}
-        </div>
-        <div style={{ textAlign: "center", marginTop: "20px" }}>
-          <button
-            onClick={onClose}
-            style={{
-              backgroundColor: "#ef4444",
-              color: "white",
-              padding: "10px 20px",
-              borderRadius: "6px",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            ปิด
-          </button>
         </div>
       </div>
     </div>
@@ -150,7 +81,7 @@ function AlbumModal({
 export default function StudentDetailPage() {
   const params = useParams();
   const portfolios = usePortfolioStore((state) => state.portfolios);
-  const portfolio = portfolios.find((p) => p.id.toString() === params.id);
+  const portfolio = portfolios.find((p) => p.id?.toString() === params.id);
 
   const [activeAlbum, setActiveAlbum] = useState<{
     title: string;
@@ -159,11 +90,11 @@ export default function StudentDetailPage() {
 
   if (!portfolio) {
     return (
-      <div style={{ padding: "32px", textAlign: "center" }}>
-        <h1 style={{ fontSize: "1.5rem", color: "#ef4444", fontWeight: "600" }}>
+      <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-white dark:bg-gray-900">
+        <h1 className="text-3xl font-bold text-red-500 dark:text-red-400 mb-4">
           ไม่พบข้อมูลนักศึกษา!
         </h1>
-        <Link href="/teacher" style={{ color: "#2563eb", textDecoration: "underline" }}>
+        <Link href="/teacher" className="text-blue-600 dark:text-blue-400 hover:underline">
           กลับไปหน้าอาจารย์
         </Link>
       </div>
@@ -176,110 +107,58 @@ export default function StudentDetailPage() {
   const workImages = portfolio.images.filter((img) => img.category === "work");
 
   return (
-    <div
-      style={{
-        padding: "32px",
-        fontFamily: "Arial, sans-serif",
-        maxWidth: "1280px",
-        margin: "auto",
-        backgroundColor: "#f3f4f6",
-        minHeight: "100vh",
-      }}
-    >
-      <div
-        style={{
-          backgroundColor: "#fff",
-          padding: "32px",
-          borderRadius: "12px",
-          boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-        }}
-      >
-        <h1
-          style={{
-            fontSize: "2rem",
-            fontWeight: "bold",
-            marginBottom: "24px",
-            textAlign: "center",
-            color: "#111827",
-          }}
-        >
+    <div className="p-8 bg-white dark:bg-gray-900 min-h-screen flex justify-center">
+      <div className="w-full max-w-5xl bg-gray-100 dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
+        <h1 className="text-3xl font-bold text-center mb-8 text-sky-800 dark:text-sky-400">
           รายละเอียด Portfolio
         </h1>
 
         {/* Layout: ซ้าย (รูป) + ขวา (ข้อมูล) */}
-        <div
-          style={{
-            display: "flex",
-            gap: "32px",
-            marginBottom: "40px",
-            alignItems: "flex-start",
-          }}
-        >
+        <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 mb-10">
           {/* รูปภาพนักศึกษา */}
-          <div style={{ flex: "1", textAlign: "center" }}>
+          <div className="flex-shrink-0 w-64 h-64 overflow-hidden rounded-full shadow-lg border-4 border-gray-300 dark:border-gray-600">
             {studentImages.length > 0 ? (
               <img
                 src={studentImages[0].url}
                 alt="Student"
-                style={{
-                  width: "100%",
-                  maxWidth: "300px",
-                  height: "auto",
-                  borderRadius: "12px",
-                  boxShadow: "0 4px 10px rgba(0,0,0,0.15)",
-                }}
+                className="w-full h-full object-cover"
               />
             ) : (
-              <p style={{ color: "#6b7280" }}>ไม่มีรูปภาพนักศึกษา</p>
+              <div className="w-full h-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center">
+                <p className="text-center text-gray-500 dark:text-gray-400">ไม่มีรูปภาพนักศึกษา</p>
+              </div>
             )}
           </div>
 
           {/* ข้อมูลนักศึกษา */}
-          <div style={{ flex: "2" }}>
-            <h2
-              style={{
-                fontSize: "1.5rem",
-                fontWeight: "600",
-                marginBottom: "16px",
-                color: "#374151",
-              }}
-            >
+          <div className="flex-1 w-full lg:w-auto">
+            <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">
               {portfolio.prefix} {portfolio.firstName} {portfolio.lastName}
             </h2>
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px", color: "#4b5563" }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-gray-600 dark:text-gray-300">
               <p><strong>ที่อยู่:</strong> {portfolio.address}</p>
               <p><strong>เบอร์โทรศัพท์:</strong> {portfolio.phone}</p>
               <p><strong>โรงเรียน:</strong> {portfolio.school}</p>
               <p><strong>GPA:</strong> {portfolio.gpa}</p>
-              <p><strong>มหาวิทยาลัยที่เลือก:</strong> {portfolio.university}</p>
-              <p><strong>สาขาที่เลือก:</strong> {portfolio.major}</p>
-              <p><strong>ความสามารถพิเศษ:</strong> {portfolio.skills}</p>
-              <p><strong>เหตุผลในการสมัคร:</strong> {portfolio.reason}</p>
+              <p><strong>มหาวิทยาลัย:</strong> {portfolio.university}</p>
+              <p><strong>สาขา:</strong> {portfolio.major}</p>
+              <p className="md:col-span-2"><strong>ความสามารถพิเศษ:</strong> {portfolio.skills}</p>
+              <p className="md:col-span-2"><strong>เหตุผลในการสมัคร:</strong> {portfolio.reason}</p>
             </div>
           </div>
         </div>
 
         {/* Albums */}
-        <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <AlbumCard title="กิจกรรม" images={activityImages} onClick={() => setActiveAlbum({ title: "กิจกรรม", images: activityImages })} />
           <AlbumCard title="รางวัล" images={awardImages} onClick={() => setActiveAlbum({ title: "รางวัล", images: awardImages })} />
           <AlbumCard title="ผลงาน" images={workImages} onClick={() => setActiveAlbum({ title: "ผลงาน", images: workImages })} />
         </div>
 
         {/* ปุ่มกลับ */}
-        <div style={{ textAlign: "center", marginTop: "32px" }}>
+        <div className="text-center mt-10">
           <Link href="/teacher">
-            <button
-              style={{
-                padding: "12px 24px",
-                backgroundColor: "#374151",
-                color: "white",
-                borderRadius: "6px",
-                fontWeight: "600",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
+            <button className="px-8 py-3 bg-gray-700 dark:bg-gray-600 text-white rounded-lg font-semibold hover:bg-gray-800 dark:hover:bg-gray-700 transition">
               กลับไปหน้าอาจารย์
             </button>
           </Link>
